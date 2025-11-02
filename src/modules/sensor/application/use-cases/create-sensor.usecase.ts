@@ -1,4 +1,5 @@
 import { EventBus } from '@core/events/event-bus';
+import { EventStoreService } from '@core/events/event-store.service';
 import { Sensor } from '@domain/entities/sensor.entity';
 import * as sensorRepository from '@domain/repositories/sensor.repository';
 import { Inject, Injectable } from '@nestjs/common';
@@ -12,6 +13,7 @@ export class CreateSensorUseCase {
     @Inject('ISensorRepository')
     private readonly sensorRepo: sensorRepository.ISensorRepository,
     private readonly eventBus: EventBus,
+    private readonly eventStore: EventStoreService,
   ) {}
 
   async execute(name: string, type: string): Promise<Sensor> {
@@ -24,6 +26,7 @@ export class CreateSensorUseCase {
     this.sensorRepo.save(sensor);
 
     await this.eventBus.publish(event);
+    this.eventStore.save(event);
 
     return sensor;
   }
