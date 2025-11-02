@@ -1,7 +1,7 @@
-import { CreateSensorUseCase } from '@application/use-cases/create-sensor.usecase';
-import { InMemomorySensorRepository } from '@infrastructure/persistence/im-memory-sensor.repository';
+import { CreateSensorUseCase } from '@modules/sensor/application/use-cases/create-sensor.usecase';
+import { InMemomorySensorRepository } from '@modules/sensor/infrastructure/persistence/im-memory-sensor.repository';
 import { Module } from '@nestjs/common';
-import { SensorController } from 'interfaces/controllers/sensor.controller';
+import { SensorController } from '@modules/sensor/interfaces/controllers/sensor.controller';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
