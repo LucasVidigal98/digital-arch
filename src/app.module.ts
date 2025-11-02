@@ -1,18 +1,12 @@
-import { CreateSensorUseCase } from '@modules/sensor/application/use-cases/create-sensor.usecase';
-import { InMemomorySensorRepository } from '@modules/sensor/infrastructure/persistence/im-memory-sensor.repository';
+import { SensorModule } from '@modules/sensor/sensor.module';
 import { Module } from '@nestjs/common';
-import { SensorController } from '@modules/sensor/interfaces/controllers/sensor.controller';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
-  imports: [],
-  controllers: [AppController, SensorController],
-  providers: [
-    AppService,
-    CreateSensorUseCase,
-    { provide: 'ISensorRepository', useClass: InMemomorySensorRepository },
-  ],
+  imports: [SensorModule],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
