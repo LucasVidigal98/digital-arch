@@ -9,5 +9,7 @@ export class NotifySensorCreatedHandler
     console.log(
       `[Event] Sensor criado: ${event.payload.name} (${event.payload.id})`,
     );
+
+    throw new Error('Method not implemented');
   }
 }
