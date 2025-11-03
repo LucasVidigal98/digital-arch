@@ -13,11 +13,11 @@ export class EventBus {
     this.queueService.createWorker(async (job) => {
       console.log(`[AsyncEventBus] Processando evento: ${job.id}`);
 
-      const { eventName, payload } = job.data;
-      const handlers = this.handlers.get(eventName) || [];
-      console.log(handlers);
+      const { name } = job.data;
+
+      const handlers = this.handlers.get(name) || [];
       for (const handler of handlers) {
-        await handler.handle(payload);
+        await handler.handle(job.data);
       }
     });
   }
@@ -26,7 +26,6 @@ export class EventBus {
     eventName: string,
     handler: EventHandler<T>,
   ): void {
-    console.log('aqui');
     if (!this.handlers.has(eventName)) {
       this.handlers.set(eventName, []);
     }

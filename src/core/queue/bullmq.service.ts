@@ -22,7 +22,9 @@ export class BullMQService {
   }
 
   async addEvent(eventName: string, payload: any) {
-    await this.queue.add(eventName, payload);
+    await this.queue.add(eventName, payload, {
+      removeOnComplete: true,
+    });
   }
 
   createWorker(processCallback: (job: Job) => Promise<void>) {
