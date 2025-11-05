@@ -1,8 +1,8 @@
-import { CreateSensorUseCase } from '@modules/sensor/application/use-cases/create-sensor.usecase';
 import { Sensor } from '@domain/entities/sensor.entity';
+import { CreateSensorUseCase } from '@modules/sensor/application/use-cases/create-sensor.usecase';
 import { InMemomorySensorRepository } from '@modules/sensor/infrastructure/persistence/im-memory-sensor.repository';
-import { Body, Controller, Get, Post } from '@nestjs/common';
 import { CreateSensorDto } from '@modules/sensor/interfaces/dtos/create-sensor.dto';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 
 @Controller('sensor')
 export class SensorController {
