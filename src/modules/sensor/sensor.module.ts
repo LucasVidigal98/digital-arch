@@ -1,6 +1,5 @@
 import { EventBus } from '@core/events/event-bus';
-import { EventStoreService } from '@core/events/event-store.service';
-import { BullMQService } from '@core/queue/bullmq.service';
+import { EventsModule } from '@core/events/events.module';
 import { Module } from '@nestjs/common';
 
 import { NotifySensorCreatedHandler } from './application/events/handlers/notify-sensor-created.handler';
@@ -9,13 +8,11 @@ import { InMemomorySensorRepository } from './infrastructure/persistence/im-memo
 import { SensorController } from './interfaces/controllers/sensor.controller';
 
 @Module({
+  imports: [EventsModule],
   controllers: [SensorController],
   providers: [
     CreateSensorUseCase,
     { provide: 'ISensorRepository', useClass: InMemomorySensorRepository },
-    EventBus,
-    EventStoreService,
-    BullMQService,
     NotifySensorCreatedHandler,
   ],
 })

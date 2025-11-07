@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+import { LeaderElectionService } from '@core/cluster/leader-election.service';
 import { BullMQService } from '@core/queue/bullmq.service';
 import { Injectable } from '@nestjs/common';
 
@@ -9,7 +10,10 @@ import { Event } from './event.interface';
 export class EventBus {
   private handlers = new Map<string, EventHandler[]>();
 
-  constructor(private readonly queueService: BullMQService) {
+  constructor(
+    private readonly queueService: BullMQService,
+    private leaerService: LeaderElectionService,
+  ) {
     this.queueService.createWorker(async (job) => {
       console.log(`[AsyncEventBus] Processando evento: ${job.id}`);
 
@@ -34,7 +38,20 @@ export class EventBus {
   }
 
   public async publish<T extends Event>(event: T): Promise<void> {
-    await this.queueService.addEvent(event.constructor.name, event);
+    if (event.isCriticalEvent) {
+      const isLeader = await this.leaerService.isLeader();
+
+      if (isLeader) {
+        console.log(`[AsyncEventBus] Evento ${event.name} enviado Pelo líder`);
+        await this.queueService.addEvent(event.constructor.name, event);
+      } else {
+        console.log(
+          '[AsyncEventBus] Node não-líder não envia eventos críticos',
+        );
+      }
+    } else {
+      await this.queueService.addEvent(event.constructor.name, event);
+    }
   }
 
   public async replayEvents(events: Event[]) {
