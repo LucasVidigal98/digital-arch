@@ -13,5 +13,6 @@ const nodeId = `worker-${Math.floor(Math.random() * 10000)}`;
     NodeMonitorService,
     LeaderElectionService,
   ],
+  exports: [LeaderElectionService],
 })
 export class ClusterModule {}
